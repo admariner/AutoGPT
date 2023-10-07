@@ -134,10 +134,7 @@ for base, copies in chat_model_mapping.items():
             copy_info.has_function_call_api = False
 
 
-OPEN_AI_MODELS = {
-    **OPEN_AI_CHAT_MODELS,
-    **OPEN_AI_EMBEDDING_MODELS,
-}
+OPEN_AI_MODELS = OPEN_AI_CHAT_MODELS | OPEN_AI_EMBEDDING_MODELS
 
 
 class OpenAIConfiguration(SystemConfiguration):
@@ -351,13 +348,11 @@ class OpenAIProvider(
             The kwargs for the embedding API call.
 
         """
-        embedding_kwargs = {
+        return {
             "model": model_name,
             **kwargs,
             **self._credentials.unmasked(),
         }
-
-        return embedding_kwargs
 
     def __repr__(self):
         return "OpenAIProvider()"

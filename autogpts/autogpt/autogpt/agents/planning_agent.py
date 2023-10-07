@@ -158,7 +158,6 @@ class PlanningAgent(ContextMixin, WorkspaceMixin, BaseAgent):
                     }}>;
                 }}
                 ```"""
-                pass
             case "action":
                 # TODO: need to insert the functions here again?
                 response_format = """```ts
@@ -178,7 +177,6 @@ class PlanningAgent(ContextMixin, WorkspaceMixin, BaseAgent):
                     };
                 }
                 ```"""
-                pass
             case "evaluate":
                 # TODO: insert latest action (with reasoning) + result + evaluation instructions
                 response_format = f"""```ts
@@ -200,7 +198,6 @@ class PlanningAgent(ContextMixin, WorkspaceMixin, BaseAgent):
                     }};
                 }}
                 ```"""
-                pass
             case _:
                 raise NotImplementedError(
                     f"Unknown thought process '{thought_process_id}'"
