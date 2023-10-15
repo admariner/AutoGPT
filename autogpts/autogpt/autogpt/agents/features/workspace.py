@@ -21,11 +21,9 @@ class WorkspaceMixin:
 
         legacy_config: Config = getattr(self, "legacy_config")
         if not isinstance(legacy_config, Config):
-            raise ValueError(f"Cannot initialize Workspace for Agent without Config")
+            raise ValueError("Cannot initialize Workspace for Agent without Config")
         if not legacy_config.workspace_path:
-            raise ValueError(
-                f"Cannot set up Workspace: no WORKSPACE_PATH in legacy_config"
-            )
+            raise ValueError("Cannot set up Workspace: no WORKSPACE_PATH in legacy_config")
 
         self.workspace = Workspace(
             legacy_config.workspace_path, legacy_config.restrict_to_workspace
@@ -33,7 +31,4 @@ class WorkspaceMixin:
 
 
 def get_agent_workspace(agent: BaseAgent) -> Workspace | None:
-    if isinstance(agent, WorkspaceMixin):
-        return agent.workspace
-
-    return None
+    return agent.workspace if isinstance(agent, WorkspaceMixin) else None

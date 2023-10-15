@@ -244,15 +244,13 @@ class OneShotAgentPromptStrategy(PromptStrategy):
                 ChatMessage.system(f"## Progress\n\n{progress}"),
             )
 
-        prompt = ChatPrompt(
+        return ChatPrompt(
             messages=[
                 ChatMessage.system(system_prompt),
                 *extra_messages,
                 final_instruction_msg,
             ],
         )
-
-        return prompt
 
     def build_system_prompt(
         self,

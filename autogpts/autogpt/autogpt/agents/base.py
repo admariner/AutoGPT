@@ -107,14 +107,9 @@ class BaseAgentConfiguration(SystemConfiguration):
             smart_llm = values["smart_llm"]
             fast_llm = values["fast_llm"]
             assert all(
-                [
-                    not any(s in name for s in {"-0301", "-0314"})
-                    for name in {smart_llm, fast_llm}
-                ]
-            ), (
-                f"Model {smart_llm} does not support OpenAI Functions. "
-                "Please disable OPENAI_FUNCTIONS or choose a suitable model."
-            )
+                all(s not in name for s in {"-0301", "-0314"})
+                for name in {smart_llm, fast_llm}
+            ), f"Model {smart_llm} does not support OpenAI Functions. Please disable OPENAI_FUNCTIONS or choose a suitable model."
 
 
 class BaseAgentSettings(SystemSettings):
@@ -272,7 +267,7 @@ class BaseAgent(Configurable[BaseAgentSettings], ABC):
         ai_directives.best_practices += scratchpad.best_practices
         extra_commands += list(scratchpad.commands.values())
 
-        prompt = self.prompt_strategy.build_prompt(
+        return self.prompt_strategy.build_prompt(
             ai_config=self.ai_config,
             ai_directives=ai_directives,
             commands=get_openai_command_specs(
@@ -281,15 +276,15 @@ class BaseAgent(Configurable[BaseAgentSettings], ABC):
             + extra_commands,
             event_history=self.event_history,
             max_prompt_tokens=self.send_token_limit,
-            count_tokens=lambda x: self.llm_provider.count_tokens(x, self.llm.name),
+            count_tokens=lambda x: self.llm_provider.count_tokens(
+                x, self.llm.name
+            ),
             count_message_tokens=lambda x: self.llm_provider.count_message_tokens(
                 x, self.llm.name
             ),
             extra_messages=extra_messages,
             **extras,
         )
-
-        return prompt
 
     def on_before_think(
         self,
